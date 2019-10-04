@@ -1,0 +1,15 @@
+html,body{
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  text-decoration:none;
+}
+.black-link:link{
+    color: #000000;
+}
+.blue-hover:hover{
+    color: #409EFF;
+}
+.el-row{
+  width: 100%;
+}
