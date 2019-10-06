@@ -16,6 +16,7 @@ Vue.use(ElementUI)
 // 导入axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+axios.defaults.withCredentials=true
 Vue.use(VueAxios, axios)
 
 /* eslint-disable no-new */

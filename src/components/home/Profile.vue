@@ -15,8 +15,8 @@
     <el-row style="margin-top: 15px;">
       <el-col :span="24">
         <el-button-group>
-          <el-button size="mini">编辑</el-button>
-          <el-button size="mini">注销</el-button>
+          <el-button size="mini" @click="edit">编辑</el-button>
+          <el-button size="mini" @click="logout">注销</el-button>
         </el-button-group>
       </el-col>
     </el-row>
@@ -24,10 +24,30 @@
 </template>
 
 <script>
-  export default{
+  export default {
     name: 'Profile',
     props: {
       accountName: String
+    },
+    methods: {
+      edit() {
+
+      },
+      logout() {
+        this.$alert('确定退出吗？', '注销', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.axios.get(this.Common.httpUrl+'/logout')
+            .then((response) =>{
+              // 判断是否登录成功并存在Session
+              if(response.data.data){
+                this.$router.push({
+                  name: 'Login'});
+              }
+            })
+          }
+        });
+      }
     }
   }
 </script>

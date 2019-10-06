@@ -28,10 +28,24 @@
     name: 'Home',
     data() {
       return {
+        accountId: 0,
         accountName: 'xiaoyu',
         tabs: [],
         currentTabIndex: 1
       }
+    },
+    created(){
+      this.axios.get(this.Common.httpUrl+'/isAuthentication')
+      .then((response) =>{
+        // 判断是否登录成功并存在Session
+        if(response.data.data.login){
+          this.accountId = response.data.data.accountId;
+          this.accountName = response.data.data.accountName;
+        }else{
+          this.$router.push({
+            name: 'Login'});
+        }
+      })
     },
     methods: {
       //增加标签页
