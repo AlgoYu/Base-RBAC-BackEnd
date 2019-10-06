@@ -13,7 +13,7 @@
     <!-- 主要内容区域 -->
     <el-main>
       <!-- Tab部分 -->
-      <Tab :tabs="tabs" :currentTabName="currentTabName" @transferSelectTab="changeTabView"></Tab>
+      <Tab :tabs="tabs" :currentTabIndex="currentTabIndex" @transferSelectTab="changeTab" @transferRemoveTab="closeTab"></Tab>
     </el-main>
   </el-container>
 </template>
@@ -26,49 +26,43 @@
 
   export default {
     name: 'Home',
-    data(){
-      return{
+    data() {
+      return {
         accountName: 'xiaoyu',
         tabs: [],
-        currentTabName: 1
+        currentTabIndex: 1
       }
     },
-    methods:{
+    methods: {
       //增加标签页
-      addTab(tab){
-        //创建一个布尔值
-        var flag = true;
+      addTab(tab) {
         //判断是否已经在tab数组里存在
-        for(var i = 0; i < this.tabs.length; i++){
+        for (var i = 0; i < this.tabs.length; i++) {
           //如果存在flag为flase
-          if(this.tabs[i].tabName === tab.tabName){
-            flag = false;
-            break;
+          if (this.tabs[i].tabId === tab.tabId) {
+            this.changeTab(i);
+            return;
           }
         }
-        //tab数组里未找到就添加
-        if(flag){
-          this.tabs.push(tab);
-        }
-        //跳转到当前的Tab
-        this.currentTabName = tab.tabName;
-        this.$router.push({
-          path: tab.routeUrl
-        });
+        //tab数组里未找到就添加并选中跳转
+        this.tabs.push(tab);
+        this.changeTab(this.tabs.length - 1);
       },
-      //改变Tab识图
-      changeTabView(tabName){
-        for(var i = 0; i < this.tabs.length; i++){
-          //寻找这个id的视图
-          if(this.tabs[i].tabName === tabName){
-            this.$router.push({
-              path: this.tabs[i].routeUrl
-            });
-            //设置当前tab为跳转tab
-            this.currentTabName = tabName;
-            break;
-          }
+      //传入Tab下标改变Tab
+      changeTab(tabIndex) {
+        this.$router.push({
+          path: this.tabs[tabIndex].routeUrl
+        });
+        this.currentTabIndex = tabIndex;
+      },
+      //关闭Tab并返回下标-1的视图
+      closeTab(tabIndex) {
+        if(tabIndex <= this.currentTabIndex){
+          this.currentTabIndex--;
+          this.changeTab(this.currentTabIndex);
         }
+        //删除这个tab
+        this.tabs.splice(tabIndex, 1);
       }
     },
     components: {

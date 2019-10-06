@@ -1,16 +1,19 @@
 <template>
   <div v-loading="loading" class="full">
-    <el-input v-on:keyup.enter.native="handleKeyboardEnter" v-model="keyWord" placeholder="搜索账户" prefix-icon="el-icon-search"
+    <el-input @keyup.enter.native="handleKeyboardEnter" v-model="keyWord" placeholder="搜索账户" prefix-icon="el-icon-search"
       clearable class="search-input"></el-input>
     <el-tooltip class="item" effect="dark" content="也可以在输入框直接回车搜索哦!" placement="bottom">
-      <el-button type="primary" v-on:click="search">搜索</el-button>
+      <el-button type="primary" @:click="handleSearch">搜索</el-button>
     </el-tooltip>
     <el-button-group>
       <el-tooltip class="item" effect="dark" content="添加" placement="bottom">
         <el-button type="primary" icon="el-icon-circle-plus"></el-button>
       </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="刷新" placement="bottom">
+        <el-button type="success" icon="el-icon-refresh" @click="handleRefresh"></el-button>
+      </el-tooltip>
       <el-tooltip class="item" effect="dark" content="批量删除" placement="bottom">
-        <el-button type="danger" icon="el-icon-remove"></el-button>
+        <el-button type="danger" icon="el-icon-remove" @click="handleBatchDelete"></el-button>
       </el-tooltip>
     </el-button-group>
     <el-table :data="accountListData" style="width: 100%">
@@ -63,9 +66,8 @@
         pageSize: 10,
         total: 0,
         keyWord: '',
-        accountListData: [{
-          accountId: 1
-        }]
+        accountListData: [],
+        isRefresh: false
       }
     },
     created() {
@@ -80,20 +82,25 @@
             keyWord: this.keyWord
           })
           .then((response) => {
-            // 判断是否登录成功
-            console.log(response.data.data.data)
-            this.loading = false;
+            // 判断是否为空或是否为数组
             if (response.data.data != null && response.data.data.data instanceof Array) {
               this.accountListData = response.data.data.data;
               this.pageSize = response.data.data.pageSize;
               this.total = response.data.data.total;
-              this.loading = false;
+              if(this.isRefresh){
+                this.$message({
+                          message: '刷新成功！',
+                          type: 'success'
+                        });
+                  this.isRefresh = false;
+              }
             } else {
               this.$message.error('请重新登录！');
               this.$router.push({
                 name: 'Login'
               });
             }
+            this.loading = false;
           })
           .catch((error) => {
             // 这里是请求失败
@@ -101,17 +108,34 @@
             this.loading = false;
           });
       },
-      search() {
+      //搜索按钮
+      handleSearch() {
         this.currentPage = 1;
         this.loadData();
       },
+      //输入框键盘回车
       handleKeyboardEnter() {
         this.currentPage = 1;
         this.loadData();
       },
+      //表格内删除按钮
       handleDelete(index, row) {
         console.log(index);
         console.log(row);
+        console.log("删除");
+      },
+      //刷新按钮
+      handleRefresh(){
+        this.isRefresh = true;
+        this.loadData();
+      },
+      //批量删除按钮
+      handleBatchDelete(){
+        console.log("批量删除")
+      },
+      //编辑按钮
+      handleEdit(index,row){
+        console.log("编辑")
       }
     }
   }

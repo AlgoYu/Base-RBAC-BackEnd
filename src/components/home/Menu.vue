@@ -32,7 +32,7 @@
           if (response.data.data != null && response.data.data instanceof Array) {
             this.menus = response.data.data;
             this.$emit('transferSelectMenu', {
-              tabName: this.menus[0].menuId,
+              tabId: this.menus[0].menuId,
               tabLable: this.menus[0].menuName,
               routeUrl: this.menus[0].menuUrl
             });
@@ -51,7 +51,7 @@
     methods: {
       selectMenu(menu) {
         this.$emit('transferSelectMenu', {
-          tabName: menu.menuId,
+          tabId: menu.menuId,
           tabLable: menu.menuName,
           routeUrl: menu.menuUrl
         });

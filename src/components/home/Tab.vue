@@ -1,6 +1,7 @@
 <template>
-  <el-tabs type="border-card" :value="currentTabName.toString()" @tab-click="selectTab">
-    <el-tab-pane :name="tab.tabName.toString()" :label="tab.tabLable" v-for="tab in tabs">
+  <el-tabs type="border-card" :value="currentTabIndex.toString()" @tab-click="selectTab" @tab-remove="removeTab">
+    <!-- 这里的tab.index!=0是为了主页不被关闭 -->
+    <el-tab-pane :closable="index!=0" :name="index.toString()" :label="tab.tabLable" v-for="(tab,index) in tabs">
     </el-tab-pane>
     <keep-alive>
       <router-view></router-view>
@@ -13,18 +14,21 @@
     name: 'Tab',
     props: {
       tabs: Array,
-      currentTabName: Number
+      currentTabIndex: Number
     },
     methods: {
+      //选择Tab
       selectTab(tab) {
-        console.log("选中:"+tab.name+"当前:"+this.currentTabName);
         var tabName = parseInt(tab.name);
         //如果是当前页面则返回
         if (tabName == this.currentTabName) {
           return;
         }
-        console.log("需要跳转！");
         this.$emit('transferSelectTab', tabName);
+      },
+      //删除Tab
+      removeTab(tabName){
+        this.$emit('transferRemoveTab', parseInt(tabName));
       }
     }
   }
