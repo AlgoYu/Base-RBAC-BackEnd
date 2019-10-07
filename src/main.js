@@ -7,7 +7,7 @@ import './assets/css/common.css'
 
 Vue.config.productionTip = false
 // 导入全局变量配置文件Common
-import Common from '@/components/Common'
+import Common from '@/components/common/Common'
 Vue.prototype.Common = Common
 // 导入ElementUI
 import ElementUI from 'element-ui'

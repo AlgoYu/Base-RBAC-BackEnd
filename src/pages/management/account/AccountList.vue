@@ -111,11 +111,13 @@
       //搜索按钮
       handleSearch() {
         this.currentPage = 1;
+        this.isRefresh = true;
         this.loadData();
       },
       //输入框键盘回车
       handleKeyboardEnter() {
         this.currentPage = 1;
+        this.isRefresh = true;
         this.loadData();
       },
       //表格内删除按钮
