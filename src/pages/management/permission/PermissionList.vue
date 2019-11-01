@@ -75,11 +75,8 @@
     methods: {
       loadData() {
         this.loading = true;
-        this.axios.post(this.Common.httpUrl + '/api/permission/getCurrentPageData', {
-            currentPage: this.currentPage,
-            pageSize: this.pageSize,
-            keyWord: this.keyWord
-          })
+        var parameterString = "?currentPage="+ this.currentPage + "&pageSize=" + this.pageSize + "&keyWord="+this.keyWord;
+        this.axios.get(this.Common.httpUrl + '/api/permission/getCurrentPageData' + parameterString)
           .then((response) => {
             // 判断是否为空或是否为数组
             if (response.data.data != null && response.data.data.data instanceof Array) {

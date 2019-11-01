@@ -38,7 +38,7 @@
       this.axios.get(this.Common.httpUrl+'/isAuthentication')
       .then((response) =>{
         // 判断是否登录成功并存在Session
-        if(response.data.data.login){
+        if(response.data.data.isLogin){
           this.accountId = response.data.data.accountId;
           this.accountName = response.data.data.accountName;
         }else{
